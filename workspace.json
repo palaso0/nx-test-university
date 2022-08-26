@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "university-backend-endpoint": "apps/university-backend-endpoint",
+    "university-web-app": "apps/university-web-app",
+    "university-web-app-e2e": "apps/university-web-app-e2e"
+  }
+}

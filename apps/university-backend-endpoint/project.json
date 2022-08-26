@@ -1,0 +1,57 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/university-backend-endpoint/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/university-backend-endpoint",
+        "main": "apps/university-backend-endpoint/src/main.ts",
+        "tsConfig": "apps/university-backend-endpoint/tsconfig.app.json",
+        "assets": ["apps/university-backend-endpoint/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/university-backend-endpoint/src/environments/environment.ts",
+              "with": "apps/university-backend-endpoint/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "university-backend-endpoint:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "university-backend-endpoint:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/university-backend-endpoint/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/university-backend-endpoint"],
+      "options": {
+        "jestConfig": "apps/university-backend-endpoint/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
