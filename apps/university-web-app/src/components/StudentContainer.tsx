@@ -2,22 +2,61 @@
 import styles from './app.module.css';
 
 import { StudentCard } from '../components/StudentCard';
-
-
-
-
+import { gql, useQuery } from '@apollo/client';
+import { Box } from '@mui/system';
+const GET_STUDENTS = gql`
+query{
+  getStudents {
+    _id
+    name
+    lastName
+    career
+    photo
+    ci
+  } 
+}
+`
 
 export function StudentContainer() {
+  const { loading, error, data } = useQuery(GET_STUDENTS)
+
+
+
+  const students = () => {
+    let component;
+    if (loading) {
+      console.log('Cargando');
+      return (<h1>Cargando</h1>)
+    }
+    else {
+      console.log('Componentes listos ')
+
+      component = data.getStudents.map((student: any) => {
+        return (<StudentCard photo={student.photo}
+          name={student.name}
+          lastName={student.lastName}
+          ci={student.ci}
+          career={student.career}
+          key={student._id}
+        />)
+      })
+    }
+    if (error) {
+      console.log(error)
+      return <h1>Error</h1>
+    }
+    return component
+  }
+
   return (
-    <>
-      <StudentCard photo="https://www.purina-latam.com/sites/g/files/auxxlc391/files/styles/social_share_large/public/Purina%C2%AE%20Como%20disciplinar%20a%20tu%20gato.jpg?itok=V7Gs6wt3"   
-        name= "Lionel"
-        lastName="Messi"
-        ci= "123"
-        career= "Mecaa"
-      />
+    <Box sx={{ display: 'flex', gap: '25px' }}>
+
+      {
+        students()
+      }
+
       <div />
-    </>
+    </Box>
   );
 }
 

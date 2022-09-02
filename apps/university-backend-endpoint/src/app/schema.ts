@@ -3,8 +3,8 @@ import {StudentTC} from './StudentModel'
 import {CourseTC} from './CourseModel'
 
 schemaComposer.Query.addFields({
-    studentOne: StudentTC.mongooseResolvers.findOne(),
-    studentMany: StudentTC.mongooseResolvers.findMany(),
+    getStudentById: StudentTC.mongooseResolvers.findOne(),
+    getStudents: StudentTC.mongooseResolvers.findMany(),
     studentCount: StudentTC.mongooseResolvers.count(),
     courseOne: CourseTC.mongooseResolvers.findOne(),
     courseMany: CourseTC.mongooseResolvers.findMany(),
@@ -24,5 +24,3 @@ schemaComposer.Mutation.addFields({
 })
 
 export const schema = schemaComposer.buildSchema()
-
-

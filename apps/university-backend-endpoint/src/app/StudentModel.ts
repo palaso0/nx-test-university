@@ -12,7 +12,7 @@ export interface IStudentDocument extends IStudent, mongoose.Document { }
 
 export const StudentSchema = new mongoose.Schema({
     ci: {
-        type: Number,
+        type: String,
         required: true,
     },
     name: {

@@ -2,6 +2,7 @@
 import styles from './app.module.css';
 import NxWelcome from './nx-welcome';
 import StudentContainer from '../components/StudentContainer';
+import Navbar from '../components/Navbar';
 
 import {
   ApolloClient,
@@ -15,12 +16,11 @@ const client = new ApolloClient({
 });
 
 
-
-
 export function App() {
   return (
     <>
       <ApolloProvider client={client}>
+        <Navbar />
         <StudentContainer />
       </ApolloProvider>
 

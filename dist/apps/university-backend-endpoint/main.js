@@ -42,7 +42,7 @@ const mongoose_1 = __webpack_require__("mongoose");
 const graphql_compose_mongoose_1 = __webpack_require__("graphql-compose-mongoose");
 exports.StudentSchema = new mongoose_1.default.Schema({
     ci: {
-        type: Number,
+        type: String,
         required: true,
     },
     name: {
@@ -79,8 +79,8 @@ const graphql_compose_1 = __webpack_require__("graphql-compose");
 const StudentModel_1 = __webpack_require__("./apps/university-backend-endpoint/src/app/StudentModel.ts");
 const CourseModel_1 = __webpack_require__("./apps/university-backend-endpoint/src/app/CourseModel.ts");
 graphql_compose_1.schemaComposer.Query.addFields({
-    studentOne: StudentModel_1.StudentTC.mongooseResolvers.findOne(),
-    studentMany: StudentModel_1.StudentTC.mongooseResolvers.findMany(),
+    getStudentById: StudentModel_1.StudentTC.mongooseResolvers.findOne(),
+    getStudents: StudentModel_1.StudentTC.mongooseResolvers.findMany(),
     studentCount: StudentModel_1.StudentTC.mongooseResolvers.count(),
     courseOne: CourseModel_1.CourseTC.mongooseResolvers.findOne(),
     courseMany: CourseModel_1.CourseTC.mongooseResolvers.findMany(),
