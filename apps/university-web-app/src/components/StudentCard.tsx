@@ -1,11 +1,16 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {gql} from '@apollo/client';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Box } from '@mui/system';
+import Button from '@mui/material/Button';
+import { REMOVE_STUDENT } from '../Queries/Mutation'
+import { useMutation } from '@apollo/client';
+import { useDispatch } from 'react-redux';
+import { refreshStudentsList } from '../slices/student/studentSlice';
 
 interface Props {
   photo: string
@@ -13,32 +18,50 @@ interface Props {
   lastName: string
   ci: string
   career: string
+  id: string
 }
 
+export const StudentCard: React.FC<Props> = ({ photo, name, lastName, ci, career, id }) => {
+  const [removeStudent] = useMutation(REMOVE_STUDENT, {
+    variables: {
+      ci: ci,
+    }
+  })
+  const dispatch = useDispatch();
 
-export const StudentCard: React.FC<Props> = ({ photo, name, lastName, ci, career }) => {
+
   return (
-    
-      <Card sx={{ maxWidth: 200 }}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={photo}
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {name} {lastName}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            CI: {ci}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Career: {career}
-          </Typography>
+    < Card sx={{ maxWidth: 200 }
+    }>
+      <CardMedia
+        component="img"
+        height="140"
+        image={photo}
+        alt="Not Found"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {name} {lastName}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          CI: {ci}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Career: {career}
+        </Typography>
 
-        </CardContent>
-      </Card>
+        <Box sx={{ with: '100%', display: 'flex', justifyContent: 'space-between' }}>
+          <Button startIcon={<EditIcon />} />
+          <Button startIcon={<DeleteIcon />} onClick={(e) => {
+            console.log(name);
+            console.log(id)
+            e.preventDefault(); 
+            removeStudent()
+            dispatch(refreshStudentsList())
+          }} />
+        </Box>
+      </CardContent>
+    </Card >
   );
 }
 

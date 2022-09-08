@@ -2,59 +2,69 @@
 import styles from './app.module.css';
 
 import { StudentCard } from '../components/StudentCard';
-import { gql, useQuery } from '@apollo/client';
 import { Box } from '@mui/system';
-const GET_STUDENTS = gql`
-query{
-  getStudents {
-    _id
-    name
-    lastName
-    career
-    photo
-    ci
-  } 
-}
-`
+import { useDispatch } from 'react-redux';
+import { store } from '../app/store';
+import { useEffect } from 'react';
+import { setStudentList,refreshStudentsList } from '../slices/student/studentSlice';
 
 export function StudentContainer() {
-  const { loading, error, data } = useQuery(GET_STUDENTS)
+  const dispatch = useDispatch()
 
+  useEffect(() => {
+    fetch('http://localhost:4000/graphql', {
+      method: 'POST',
 
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        query: `{
+        getStudents {
+            _id
+            name
+            lastName
+            career
+            ci
+            photo
+          }
+    }`
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.data.getStudents);
+        dispatch(setStudentList(res))
+      })
+  }, [])
 
   const students = () => {
-    let component;
-    if (loading) {
-      console.log('Cargando');
-      return (<h1>Cargando</h1>)
-    }
-    else {
-      console.log('Componentes listos ')
 
-      component = data.getStudents.map((student: any) => {
-        return (<StudentCard photo={student.photo}
-          name={student.name}
-          lastName={student.lastName}
-          ci={student.ci}
-          career={student.career}
-          key={student._id}
-        />)
-      })
+    console.log('Componentes listos ')
+    console.log('De Redux', store.getState().students.studentList);
+
+    let component = store.getState().students.studentList.map((student: any) => {
+      return (<StudentCard photo={student.photo}
+        name={student.name}
+        lastName={student.lastName}
+        ci={student.ci}
+
+        career={student.career}
+        key={student._id}
+        id={student._id}
+      />)
     }
-    if (error) {
-      console.log(error)
-      return <h1>Error</h1>
-    }
+    )
+
     return component
   }
 
   return (
-    <Box sx={{ display: 'flex', gap: '25px' }}>
-
+    <Box sx={{ display: 'flex', gap: '25px', flexWrap: 'wrap' }}>
       {
         students()
       }
-
       <div />
     </Box>
   );

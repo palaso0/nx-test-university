@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import SortIcon from '@mui/icons-material/Sort';
 import Modal from '@mui/material/Modal';
 import StudentForm from './Forms/StudentForm';
@@ -16,7 +15,7 @@ interface IModalState {
 
 export default class Navbar extends React.Component<IProps, IModalState> {
     override state: IModalState = {
-        showModal: true,
+        showModal: false,
     };
 
     closeModal = () => {
@@ -32,11 +31,12 @@ export default class Navbar extends React.Component<IProps, IModalState> {
         }))
     }
 
+
     override render() {
 
         return (
             <Box sx={{ width: '100%', mb: '20px', display: 'flex', justifyContent: 'center', gap: '25px' }}>
-                <Button onClick={this.openModal} variant='contained' startIcon={<AddIcon />} > Add</Button >
+                <Button onClick={this.openModal} variant='contained' > Add</Button >
                 <Button variant='outlined' startIcon={<SortIcon />} > Sort</Button >
 
                 <Modal

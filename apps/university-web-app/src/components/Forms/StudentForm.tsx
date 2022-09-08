@@ -5,17 +5,7 @@ import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { gql, useMutation } from '@apollo/client';
-
-interface IProps {
-    closeModal: () => void
-}
-export interface IStudentState {
-    name: string,
-    lastName: string,
-    ci: string,
-    career: string,
-    photo: string
-}
+import { ADD_STUDENT } from '../../Queries/Mutation';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -33,45 +23,58 @@ const style = {
 };
 
 
-export default function Navbar(props:any) {
 
-    const [student,setStudent] = useState({
+export default function Navbar(props: any) {
+
+
+    const [student, setStudent] = useState({
         name: '',
         lastName: '',
         ci: '',
-        career: 'asdf',
+        career: '',
         photo: ''
     });
 
-    const saveStudent = () => {
-        console.log(student);
-        
-    }
-    const handleChange = (event:any) => {
-        // use spread operator
+    const [createStudent] = useMutation(ADD_STUDENT, {
+        variables: {
+            name: student.name,
+            lastName: student.name,
+            ci: student.ci,
+            career: student.career,
+            photo: student.photo
+        }
+    })
+
+
+
+    const handleChange = (event: any) => {
         setStudent({
-          ...student,
-          [event.target.name]: event.target.value,
+            ...student,
+            [event.target.name]: event.target.value
         });
-      };
+    };
 
     return (
-        <Box sx={style} component="form">
+        <Box sx={style} component="form" >
             <Typography id="modal-modal-title" variant="h6" component="h2">
                 New Student
             </Typography>
 
-            <TextField label="Name" variant="outlined" value={student.name} onChange={handleChange}/>
-            <TextField label="Last Name" variant="outlined" required  />
-            <TextField label="CI" variant="outlined" required />
-            <TextField label="Career" variant="outlined" required />
-            <TextField label="Photo" variant="outlined" required  />
+            <TextField label="Name" variant="outlined" name="name" onChange={handleChange} />
+            <TextField label="Last Name" variant="outlined" required name="lastName" onChange={handleChange} />
+            <TextField label="CI" variant="outlined" required name="ci" onChange={handleChange} />
+            <TextField label="Career" variant="outlined" required name="career" onChange={handleChange} />
+            <TextField label="Photo" variant="outlined" required name="photo" onChange={handleChange} />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Button variant="outlined" onClick={saveStudent}> Accept </Button>
+                <Button variant="outlined" onClick={(e) => {
+                    e.preventDefault();
+                    createStudent();
+                    props.closeModal();
+                }}> Accept </Button>
                 <Button color="error" variant="outlined" onClick={props.closeModal}> Cancel </Button>
             </Box>
 
-        </Box>
+        </Box >
     )
 }

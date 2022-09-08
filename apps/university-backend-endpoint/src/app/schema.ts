@@ -15,7 +15,7 @@ schemaComposer.Mutation.addFields({
     studentCreateOne: StudentTC.mongooseResolvers.createOne(),
     studentUpdateOne: StudentTC.mongooseResolvers.updateOne(),
     studentUpdateMany: StudentTC.mongooseResolvers.updateMany(),
-    studentRemoveOne: StudentTC.mongooseResolvers.removeOne (),
+    studentRemoveOne: StudentTC.mongooseResolvers.removeOne(),
     courseCreateOne: CourseTC.mongooseResolvers.createOne(),
     courseUpdateOne: CourseTC.mongooseResolvers.updateOne(),
     courseUpdateMany: CourseTC.mongooseResolvers.updateMany(),

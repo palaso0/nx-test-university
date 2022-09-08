@@ -3,6 +3,9 @@ import styles from './app.module.css';
 import NxWelcome from './nx-welcome';
 import StudentContainer from '../components/StudentContainer';
 import Navbar from '../components/Navbar';
+import {Provider} from 'react-redux'
+import {store} from '../app/store'
+
 
 import {
   ApolloClient,
@@ -20,8 +23,10 @@ export function App() {
   return (
     <>
       <ApolloProvider client={client}>
+        <Provider store={store} >
         <Navbar />
         <StudentContainer />
+        </Provider>
       </ApolloProvider>
 
       <div />
