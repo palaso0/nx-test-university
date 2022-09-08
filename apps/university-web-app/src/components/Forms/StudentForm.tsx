@@ -4,8 +4,8 @@ import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { gql, useMutation } from '@apollo/client';
-import { ADD_STUDENT } from '../../Queries/Mutation';
+import { useDispatch, useSelector } from 'react-redux';
+import { setStudentList } from '../../slices/student/studentSlice';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -25,8 +25,6 @@ const style = {
 
 
 export default function Navbar(props: any) {
-
-
     const [student, setStudent] = useState({
         name: '',
         lastName: '',
@@ -34,17 +32,65 @@ export default function Navbar(props: any) {
         career: '',
         photo: ''
     });
+    const dispatch = useDispatch()
 
-    const [createStudent] = useMutation(ADD_STUDENT, {
-        variables: {
-            name: student.name,
-            lastName: student.name,
-            ci: student.ci,
-            career: student.career,
-            photo: student.photo
-        }
-    })
-
+    function addStudent() {
+        fetch('http://localhost:4000/graphql', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                query: `
+                mutation StudentCreateOne {
+                    studentCreateOne(
+                      record: {
+                        ci: "${student.ci}"
+                        name: "${student.name}"
+                        lastName: "${student.lastName}"
+                        career: "${student.career}"
+                        photo: "${student.photo}"
+                      }
+                    ) {
+                      record {
+                        ci
+                        name
+                        lastName
+                        career
+                        photo
+                      }
+                    }
+                  }                  
+              `
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                fetch('http://localhost:4000/graphql', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        query: `{
+              getStudents {
+                  _id
+                  name
+                  lastName
+                  career
+                  ci
+                  photo
+                }
+          }`
+                    })
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res.data.getStudents);
+                        dispatch(setStudentList(res))
+                    })
+            })
+    }
 
 
     const handleChange = (event: any) => {
@@ -69,12 +115,11 @@ export default function Navbar(props: any) {
             <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Button variant="outlined" onClick={(e) => {
                     e.preventDefault();
-                    createStudent();
+                    addStudent()
                     props.closeModal();
                 }}> Accept </Button>
                 <Button color="error" variant="outlined" onClick={props.closeModal}> Cancel </Button>
             </Box>
-
         </Box >
     )
 }

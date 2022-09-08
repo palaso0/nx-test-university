@@ -3,13 +3,14 @@ import styles from './app.module.css';
 
 import { StudentCard } from '../components/StudentCard';
 import { Box } from '@mui/system';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../app/store';
 import { useEffect } from 'react';
-import { setStudentList,refreshStudentsList } from '../slices/student/studentSlice';
+import { setStudentList,refreshStudentsList, selectStudentList } from '../slices/student/studentSlice';
 
 export function StudentContainer() {
   const dispatch = useDispatch()
+  const studentList = useSelector(selectStudentList).students.studentList
 
   useEffect(() => {
     fetch('http://localhost:4000/graphql', {
@@ -42,9 +43,9 @@ export function StudentContainer() {
   const students = () => {
 
     console.log('Componentes listos ')
-    console.log('De Redux', store.getState().students.studentList);
+    console.log('Student List', studentList);
 
-    let component = store.getState().students.studentList.map((student: any) => {
+    let component = studentList.map((student: any) => {
       return (<StudentCard photo={student.photo}
         name={student.name}
         lastName={student.lastName}

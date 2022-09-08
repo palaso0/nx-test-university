@@ -7,10 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/system';
 import Button from '@mui/material/Button';
-import { REMOVE_STUDENT } from '../Queries/Mutation'
-import { useMutation } from '@apollo/client';
-import { useDispatch } from 'react-redux';
-import { refreshStudentsList } from '../slices/student/studentSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setStudentList } from '../slices/student/studentSlice';
 
 interface Props {
   photo: string
@@ -22,12 +20,55 @@ interface Props {
 }
 
 export const StudentCard: React.FC<Props> = ({ photo, name, lastName, ci, career, id }) => {
-  const [removeStudent] = useMutation(REMOVE_STUDENT, {
-    variables: {
-      ci: ci,
-    }
-  })
   const dispatch = useDispatch();
+
+  function removeStudent() {
+    fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: `
+        mutation StudentRemoveOne {
+          studentRemoveOne(filter: {
+            _id: "${id}",
+          }) {
+            record {
+              _id
+            }
+          }
+        }
+        `
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        fetch('http://localhost:4000/graphql', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            query: `{
+        getStudents {
+            _id
+            name
+            lastName
+            career
+            ci
+            photo
+          }
+    }`
+          })
+        })
+          .then(res => res.json())
+          .then(res => {
+            console.log(res.data.getStudents);
+            dispatch(setStudentList(res))
+          })
+      })
+  }
 
 
   return (
@@ -53,11 +94,8 @@ export const StudentCard: React.FC<Props> = ({ photo, name, lastName, ci, career
         <Box sx={{ with: '100%', display: 'flex', justifyContent: 'space-between' }}>
           <Button startIcon={<EditIcon />} />
           <Button startIcon={<DeleteIcon />} onClick={(e) => {
-            console.log(name);
-            console.log(id)
-            e.preventDefault(); 
+            e.preventDefault();
             removeStudent()
-            dispatch(refreshStudentsList())
           }} />
         </Box>
       </CardContent>

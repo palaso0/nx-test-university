@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { stat } from 'fs'
 import { getStudents } from '../../services/queries'
 
 interface IStudent {
@@ -24,13 +25,17 @@ export const studentSlice = createSlice({
         },
         refreshStudentsList: (state) => {
             state.studentList = [...state.studentList]
+            console.log('Nuevo state: ', state.studentList);
+        },
+        removeStudent: (state,action) => {
+            console.log(action.payload);
         }
     }
 })
 
 export const { setStudentList, refreshStudentsList } = studentSlice.actions;
 
-export const selectDisplayOperation = (state: any) => state
+export const selectStudentList = (state: any) => state
 
 export default studentSlice.reducer;
 
