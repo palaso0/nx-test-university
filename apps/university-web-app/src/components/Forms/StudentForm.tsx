@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
-import { setStudentList } from '../../slices/student/studentSlice';
+import { setStudentList,sortStudentList } from '../../slices/student/studentSlice';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -32,6 +32,7 @@ export default function Navbar(props: any) {
         career: '',
         photo: ''
     });
+
     const dispatch = useDispatch()
 
     function addStudent() {

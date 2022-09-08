@@ -9,6 +9,7 @@ import { Box } from '@mui/system';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { setStudentList } from '../slices/student/studentSlice';
+import { response } from 'express';
 
 interface Props {
   photo: string
@@ -22,8 +23,8 @@ interface Props {
 export const StudentCard: React.FC<Props> = ({ photo, name, lastName, ci, career, id }) => {
   const dispatch = useDispatch();
 
-  function removeStudent() {
-    fetch('http://localhost:4000/graphql', {
+  const fetchRemoveStudent = (id:string) =>{
+    const response = fetch('http://localhost:4000/graphql', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -42,7 +43,13 @@ export const StudentCard: React.FC<Props> = ({ photo, name, lastName, ci, career
         `
       })
     })
-      .then(res => res.json())
+    return response
+  }
+
+
+  function removeStudent() {
+    
+      fetchRemoveStudent(id).then(res => res.json())
       .then(res => {
         fetch('http://localhost:4000/graphql', {
           method: 'POST',

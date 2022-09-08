@@ -10413,3 +10413,8 @@
   "integrity" "sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ=="
   "resolved" "https://registry.npmjs.org/zen-observable/-/zen-observable-0.8.15.tgz"
   "version" "0.8.15"
+
+"zlib@^1.0.5":
+  "integrity" "sha512-40fpE2II+Cd3k8HWTWONfeKE2jL+P42iWJ1zzps5W51qcTsOUKM5Q5m2PFb0CLxlmFAaUuUdJGc3OfZy947v0w=="
+  "resolved" "https://registry.npmjs.org/zlib/-/zlib-1.0.5.tgz"
+  "version" "1.0.5"

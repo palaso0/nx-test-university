@@ -6,7 +6,7 @@ import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../app/store';
 import { useEffect } from 'react';
-import { setStudentList,refreshStudentsList, selectStudentList } from '../slices/student/studentSlice';
+import { setStudentList, selectStudentList } from '../slices/student/studentSlice';
 
 export function StudentContainer() {
   const dispatch = useDispatch()
@@ -35,16 +35,11 @@ export function StudentContainer() {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res.data.getStudents);
         dispatch(setStudentList(res))
       })
   }, [])
 
   const students = () => {
-
-    console.log('Componentes listos ')
-    console.log('Student List', studentList);
-
     let component = studentList.map((student: any) => {
       return (<StudentCard photo={student.photo}
         name={student.name}
